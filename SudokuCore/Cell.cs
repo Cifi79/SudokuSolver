@@ -31,10 +31,21 @@ namespace SudokuCore.Elements
             get
             {
                 var items = Values.Where(p => p.Value == true).ToList();
+
+                //impossible sudoku
+                if (items.Count == 0)
+                    return -2;
+
                 if (items.Count > 1)
                     return -1;
                 else
                     return items[0].Key;
+            }
+
+            set
+            {
+                for (int i = 1; i <= dimension; i++)
+                    Values[i] = (i == value);
             }
         }
 
@@ -43,7 +54,7 @@ namespace SudokuCore.Elements
         /// True is a valid value
         /// False is not a valid value
         /// </summary>
-        public Dictionary<int, bool> Values { get; set; }
+        public Dictionary<int, bool> Values { get; set; } = new Dictionary<int, bool>();
 
         public Cell()
         {
@@ -75,6 +86,16 @@ namespace SudokuCore.Elements
             return true;
         }
 
+        public override string ToString()
+        {
+            string val = "";
+            foreach (var item in Values)
+            {
+                if (item.Value)
+                    val += $"{item.Key},";
+            }
+            return val;
+        }
     }
 
 }
