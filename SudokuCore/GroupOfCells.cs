@@ -10,14 +10,36 @@ namespace SudokuCore.Elements
         Values16 = 16
     }
 
+    public enum BoardSolutionState
+    {
+        Unsolved,
+        Solved,
+        ImpossibleBoard,
+        ImpossibleSolution,
+    }
+
     public class Board
     {
         public DimensionOption Dimension { get; set; } = DimensionOption.Values9;
 
-        public List<Row> Rows = new List<Row>();
-        public List<Column> Cols = new List<Column>();
-        public List<Square> Squares = new List<Square>();
-        public List<Cell> Cells = new List<Cell>();
+        public int SolvedCells
+        {
+            get
+            {
+                int _solvedCells = 0;
+                foreach (var item in Cells)
+                {
+                    if (item.CorrectValue > 0)
+                        _solvedCells++;
+                }
+                return _solvedCells;
+            }
+        }
+
+        public List<Row> Rows { get; private set; } = new List<Row>();
+        public List<Column> Cols { get; private set; } = new List<Column>();
+        public List<Square> Squares { get; private set; } = new List<Square>();
+        public List<Cell> Cells { get; private set; } = new List<Cell>();
 
         public Board()
         {
@@ -102,6 +124,54 @@ namespace SudokuCore.Elements
 
             return true;
         }
+
+        /// <summary>
+        /// This method check one time lines,columns and squares
+        /// </summary>
+        /// <returns></returns>
+        public BoardSolutionState SolveBoard()
+        {
+            int _solvedCells = SolvedCells;
+
+            //verify all the lines
+            foreach (var item in Rows)
+                item.VerifyCells();
+
+            //verify all the columns
+            foreach (var item in Cols)
+                item.VerifyCells();
+
+            //verify all the squares
+            foreach (var item in Squares)
+                item.VerifyCells();
+
+            if (_solvedCells == SolvedCells)
+                return BoardSolutionState.ImpossibleSolution;
+
+            return VerifyBoardSolution();
+        }
+
+        /// <summary>
+        ///verify if all the cells have correct value
+        /// </summary>
+        /// <returns></returns>
+        private BoardSolutionState VerifyBoardSolution()
+        {
+            bool unsolvedyet = false;
+            foreach (var item in Cells)
+            {
+                if (item.CorrectValue == -1)
+                    unsolvedyet = true;
+
+                if (item.CorrectValue == -2)
+                    return BoardSolutionState.ImpossibleSolution;
+            }
+
+            if (unsolvedyet)
+                return BoardSolutionState.Unsolved;
+            else
+                return BoardSolutionState.Solved;
+        }
     }
 
     /// <summary>
@@ -109,7 +179,7 @@ namespace SudokuCore.Elements
     /// </summary>
     public class GroupOfCells
     {
-        List<Cell> Cells = new List<Cell>();
+        public List<Cell> Cells { get; private set; } = new List<Cell>();
 
         /// <summary>
         /// Constructor that accept a dictionary with cells passed from the Board with its indexes
@@ -125,7 +195,7 @@ namespace SudokuCore.Elements
         /// This method verify if a cell has a certanly value then remove this value from the other cell
         /// </summary>
         /// <returns></returns>
-        public bool VerifyCell()
+        public bool VerifyCells()
         {
             for (int i = 0; i < Cells.Count; i++)
             {

@@ -12,76 +12,60 @@ namespace TestProject
         static void Main(string[] args)
         {
             //init board
-            Board SudokuBoard = new Board(DimensionOption.Values9);
+            Board SudokuBoard = new Board(DimensionOption.Values4);
 
             //fill some cells
-            SudokuBoard.Cells[1].CorrectValue = 1;
-            SudokuBoard.Cells[2].CorrectValue = 2;
-            SudokuBoard.Cells[3].CorrectValue = 3;
-            SudokuBoard.Cells[4].CorrectValue = 4;
-            SudokuBoard.Cells[5].CorrectValue = 5;
-            SudokuBoard.Cells[6].CorrectValue = 6;
-            SudokuBoard.Cells[7].CorrectValue = 7;
-            SudokuBoard.Cells[8].CorrectValue = 8;
+            SudokuBoard.Cells[0].CorrectValue = 4;
+            SudokuBoard.Cells[3].CorrectValue = 2;
+            SudokuBoard.Cells[5].CorrectValue = 2;
+            SudokuBoard.Cells[6].CorrectValue = 1;
 
-            SudokuBoard.Cells[31].CorrectValue = 1;
-            SudokuBoard.Cells[32].CorrectValue = 2;
-            SudokuBoard.Cells[33].CorrectValue = 3;
-            SudokuBoard.Cells[34].CorrectValue = 4;
-            SudokuBoard.Cells[35].CorrectValue = 5;
-            SudokuBoard.Cells[36].CorrectValue = 6;
-            SudokuBoard.Cells[37].CorrectValue = 7;
-            SudokuBoard.Cells[38].CorrectValue = 8;
+            //SudokuBoard.Cells[12].CorrectValue = 2;
+            //SudokuBoard.Cells[13].CorrectValue = 3;
+            //SudokuBoard.Cells[14].CorrectValue = 4;
+            SudokuBoard.Cells[15].CorrectValue = 1;
 
 
             //solve the sudoku
-            bool unsolvedyet = true;
-            int unsolvedcells = 0;
-            int unsolvedcells_old = 0;
+            bool tryAgain = true;
             do
             {
-                //verify all the lines
-                foreach (var item in SudokuBoard.Rows)
-                    item.VerifyCell();
-
-                //verify all the columns
-                foreach (var item in SudokuBoard.Cols)
-                    item.VerifyCell();
-
-                //verify all the squares
-                foreach (var item in SudokuBoard.Squares)
-                    item.VerifyCell();
-
-                //verify if all the cells have correct value
-                unsolvedcells = 0;
-                foreach (var item in SudokuBoard.Cells)
+                switch (SudokuBoard.SolveBoard())
                 {
-                    if (item.CorrectValue == -1)
-                    {
-                        unsolvedcells++;
-                        unsolvedyet = true;
-                    }
-
-                    if (item.CorrectValue == -2)
-                    {
-                        Console.WriteLine("Impossible Sudoku !!!");
-                        unsolvedcells_old = unsolvedcells;
-
+                    case BoardSolutionState.Unsolved:
+                        Console.WriteLine("Solved cells:" + SudokuBoard.SolvedCells);
+                        tryAgain = true;
                         break;
-                    }
+                    case BoardSolutionState.Solved:
+                        Console.WriteLine("BOARD SOLVED !!!");
+                        tryAgain = false;
+                        break;
+                    case BoardSolutionState.ImpossibleBoard:
+                        Console.WriteLine("This board is not possible");
+                        tryAgain = true;
+                        break;
+                    case BoardSolutionState.ImpossibleSolution:
+                        Console.WriteLine("Unresolvable Sudoku");
+                        tryAgain = true;
+                        break;
+                    default:
+                        break;
                 }
 
-                Console.WriteLine("Unsolved cells:" + unsolvedcells);
+                //Console.ReadLine();
 
-                if (unsolvedcells == unsolvedcells_old)
+            } while (tryAgain);
+
+
+            foreach (var row in SudokuBoard.Rows)
+            {
+                foreach (var cell in row.Cells)
                 {
-                    Console.WriteLine("Unresolvable Sudoku");
-                    break;
+                    Console.Write($"\t{cell.CorrectValue}");
                 }
-                else
-                    unsolvedcells_old = unsolvedcells;
-
-            } while (unsolvedyet);
+                Console.Write("\n\r");
+                Console.Write("\n\r");
+            }
 
             Console.ReadLine();
         }
