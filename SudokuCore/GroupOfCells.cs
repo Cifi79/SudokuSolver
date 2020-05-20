@@ -137,13 +137,19 @@ namespace SudokuCore.Elements
             foreach (var item in Rows)
                 item.VerifyCells();
 
+            Console.WriteLine($"--> {SolvedCells} solved cells");
+
             //verify all the columns
             foreach (var item in Cols)
                 item.VerifyCells();
 
+            Console.WriteLine($"--> {SolvedCells} solved cells");
+
             //verify all the squares
             foreach (var item in Squares)
                 item.VerifyCells();
+
+            Console.WriteLine($"--> {SolvedCells} solved cells");
 
             if (_solvedCells == SolvedCells)
                 return BoardSolutionState.ImpossibleSolution;

@@ -44,6 +44,8 @@ namespace SudokuCore.Elements
 
             set
             {
+                if (value == 0)
+                    return;
                 for (int i = 1; i <= dimension; i++)
                     Values[i] = (i == value);
             }
