@@ -27,5 +27,28 @@ namespace MainWindow
         {
             InitializeComponent();
         }
+
+        private void BtnStart_Click(object sender, RoutedEventArgs e)
+        {
+            mainBoard = new Board(DimensionOption.Values9);
+
+            //inizializzazione griglia
+            MainBoard.RowDefinitions.Clear();
+            for (int i = 0; i < 9; i++)
+            {
+                MainBoard.RowDefinitions.Add(new RowDefinition());
+                MainBoard.ColumnDefinitions.Add(new ColumnDefinition());
+            }
+        }
+
+        private void MainBoard_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            
+        }
+
+        private void BtnSolve_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

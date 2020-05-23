@@ -3,24 +3,30 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MainWindow"
-        xmlns:sc ="clr-namespace:SudokuCore"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="75"/>
-        <Grid Grid.Row="1" Grid.Column="1">
-            
+        <Button x:Name="BtnStart" Grid.Row="0" Grid.Column="0" Content="NEW Game" FontSize="20" HorizontalAlignment="Center" Margin="5" Padding="5" VerticalAlignment="Center" Width="Auto" Height="75" Click="BtnStart_Click"/>
+        <Button x:Name="BtnSolve" Grid.Row="0" Grid.Column="1" Content="SOLVE" FontSize="20" HorizontalAlignment="Center" Margin="5" Padding="5" VerticalAlignment="Center" Width="75" Height="75" Click="BtnSolve_Click"/>
+        <ComboBox x:Name="CbBoardType" Grid.Row="0" Grid.Column="2" FontSize="20" HorizontalAlignment="Left" Margin="5" Padding="5" VerticalAlignment="Center" Width="250" Height="40"/>
+        
+        <Grid x:Name="MainBoard" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="10" Mouse.MouseUp="MainBoard_MouseUp">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
         </Grid>
     </Grid>
       
-    </Grid>
 </Window>
